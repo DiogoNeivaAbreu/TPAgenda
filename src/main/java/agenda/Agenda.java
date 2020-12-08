@@ -3,10 +3,15 @@ package agenda;
 import java.time.LocalDate;
 import java.util.*;
 
+
 /**
  * Description : An agenda that stores events
  */
 public class Agenda {
+    
+    public List<Event> myEvents = new ArrayList<>();
+    public List<Event> myEventsDay = new ArrayList<>();
+    
     /**
      * Adds an event to this agenda
      *
@@ -14,7 +19,7 @@ public class Agenda {
      */
     public void addEvent(Event e) {
         // TODO : implémenter cette méthode
-        throw new UnsupportedOperationException("Pas encore implémenté");
+        myEvents.add(e);
     }
 
     /**
@@ -25,6 +30,11 @@ public class Agenda {
      */
     public List<Event> eventsInDay(LocalDate day) {
         // TODO : implémenter cette méthode
-        throw new UnsupportedOperationException("Pas encore implémenté");
+        for (Event e : myEvents){
+            if (e.isInDay(day)){
+                myEventsDay.add(e);
+            }
+        }
+        return myEventsDay;
     }
 }

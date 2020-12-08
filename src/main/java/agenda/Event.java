@@ -41,7 +41,11 @@ public class Event {
      */
     public boolean isInDay(LocalDate aDay) {
         // TODO : implémenter cette méthode
-        throw new UnsupportedOperationException("Pas encore implémenté");
+        
+        if (aDay.equals(myStart)){
+            return true;
+        }
+        return false;
     }
    
     /**
