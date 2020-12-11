@@ -57,35 +57,21 @@ public class RepetitiveEvent extends Event {
     }
     
     public boolean isInDay(LocalDate aDay){
-        LocalDateTime start = this.getStart();
-        Duration duration = this.getDuration();
-        LocalDateTime myEnd = start.plus(duration);
-        boolean r = false;
+        boolean b=true;
         
         for (LocalDate d : lesExceptions){
-            if (d.isEqual(aDay)){
-                return false; 
+            if (!(d.isEqual(aDay))){
+                return true; 
             }
         }
-        if (start.toLocalDate().isEqual(aDay)){
-            return true;
-        }
-        while (start.toLocalDate().isBefore(aDay)){
-            myEnd = start.plus(duration);
-            if (start.toLocalDate().isBefore(aDay) || start.toLocalDate().isEqual(aDay)){
-                if (myEnd.toLocalDate().isAfter(aDay) || myEnd.toLocalDate().isEqual(aDay)){
+        
+        while (start.toLocalDate().isBefore(aDay) || start.equals(aDay)){
+            if (start.toLocalDate().isEqual(aDay)){
                     return true;
-                }
-                else {
-                    r = false;
-                }
             }
-            else {
-                r = false;
-            }
-        start = start.plus(1, frequency);
+            start = start.plus(1, frequency);
         }
-        return r;
+        return b;
     }
 
 }

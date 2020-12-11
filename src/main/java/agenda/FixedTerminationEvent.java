@@ -13,6 +13,8 @@ public class FixedTerminationEvent extends RepetitiveEvent {
 
     public LocalDate terminationInclusive;
     public long numberOfOccurrences;
+    public LocalDate fin;
+    
     /**
      * Constructs a fixed terminationInclusive event ending at a given date
      *
@@ -60,61 +62,12 @@ public class FixedTerminationEvent extends RepetitiveEvent {
      */
     public LocalDate getTerminationDate() {
         // TODO : implémenter cette méthode
-        return terminationInclusive;
+        return this.getStart().plus(this.numberOfOccurrences - 1, frequency).toLocalDate();
     }
 
     public long getNumberOfOccurrences() {
         // TODO : implémenter cette méthode
-        return this.numberOfOccurrences;
+        return this.getStart().toLocalDate().until(this.terminationInclusive, frequency) + 1;
     }
     
-     public void addExecption(LocalDate date) {
-        lesExceptions.add(date);
-    }
-
-    public boolean isInDay(LocalDate aDay) {
-        LocalDateTime start = this.getStart();
-        Duration duration = this.getDuration();
-        LocalDateTime myEnd = start.plus(duration);
-
-        boolean r = false;
-
-        for (LocalDate d : lesExceptions) {
-            if (d.isEqual(aDay)) {
-                return false;
-            }
-
-            if (start.toLocalDate().isEqual(aDay)) {
-                return true;
-            }
-
-            if (this.terminationInclusive != null) {
-                if ((start.plus(numberOfOccurrences)).LocalDate().isAfter(aDay) || (start.plus(numberOfOccurrences)).LocalDate().isEqual(aDay)) {
-
-                    while (start.toLocalDate().isBefore(aDay)) {
-                        myEnd = start.plus(duration);
-                        if (start.toLocalDate().isBefore(aDay) || start.toLocalDate().isEqual(aDay)) {
-                            if (myEnd.toLocalDate().isAfter(aDay) || myEnd.toLocalDate().isEqual(aDay)) {
-                                return true;
-                            }
-
-                        }
-                        start = start.plus(1, frequency);
-                    }
-                }
-            } else {
-                if (start.plus(this.numberOfOccurrences, this.frequency).toLocalDate().isAfter(aDay) || start.plus(this.numberOfOccurrences, this.frequency).toLocalDate().isEqual(aDay));
-                while (start.toLocalDate().isBefore(aDay) || start.toLocalDate().isEqual(aDay)) {
-                    if (start.toLocalDate().isBefore(aDay) || start.toLocalDate().isEqual(aDay)) {
-                        if (myEnd.toLocalDate().isAfter(aDay) || myEnd.toLocalDate().isEqual(aDay)) {
-                            return true;
-                        }
-                    }
-                }
-
-                return r;
-
-            }
-        }
-        
 }
