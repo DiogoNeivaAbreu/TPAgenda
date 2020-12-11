@@ -31,7 +31,6 @@ public class FixedTerminationEvent extends RepetitiveEvent {
          super(title, start, duration, frequency);
         // TODO : implémenter cette méthode
         this.terminationInclusive = terminationInclusive;
-        while(LocalDate.now().isAfter(start) && LocalDate.now().isBefore(terminationInclusive).)
 
     }
 
@@ -52,8 +51,7 @@ public class FixedTerminationEvent extends RepetitiveEvent {
     public FixedTerminationEvent(String title, LocalDateTime start, Duration duration, ChronoUnit frequency, long numberOfOccurrences) {
         super(title, start, duration, frequency);
         // TODO : implémenter cette méthode
-        
-        for ( long i=0; i<numberOfOccurrences; i++)
+        this.numberOfOccurrences = numberOfOccurrences;
     }
 
     /**
@@ -62,12 +60,61 @@ public class FixedTerminationEvent extends RepetitiveEvent {
      */
     public LocalDate getTerminationDate() {
         // TODO : implémenter cette méthode
-        throw new UnsupportedOperationException("Pas encore implémenté");   
+        return terminationInclusive;
     }
 
     public long getNumberOfOccurrences() {
         // TODO : implémenter cette méthode
-        throw new UnsupportedOperationException("Pas encore implémenté");
+        return this.numberOfOccurrences;
     }
+    
+     public void addExecption(LocalDate date) {
+        lesExceptions.add(date);
+    }
+
+    public boolean isInDay(LocalDate aDay) {
+        LocalDateTime start = this.getStart();
+        Duration duration = this.getDuration();
+        LocalDateTime myEnd = start.plus(duration);
+
+        boolean r = false;
+
+        for (LocalDate d : lesExceptions) {
+            if (d.isEqual(aDay)) {
+                return false;
+            }
+
+            if (start.toLocalDate().isEqual(aDay)) {
+                return true;
+            }
+
+            if (this.terminationInclusive != null) {
+                if ((start.plus(numberOfOccurrences)).LocalDate().isAfter(aDay) || (start.plus(numberOfOccurrences)).LocalDate().isEqual(aDay)) {
+
+                    while (start.toLocalDate().isBefore(aDay)) {
+                        myEnd = start.plus(duration);
+                        if (start.toLocalDate().isBefore(aDay) || start.toLocalDate().isEqual(aDay)) {
+                            if (myEnd.toLocalDate().isAfter(aDay) || myEnd.toLocalDate().isEqual(aDay)) {
+                                return true;
+                            }
+
+                        }
+                        start = start.plus(1, frequency);
+                    }
+                }
+            } else {
+                if (start.plus(this.numberOfOccurrences, this.frequency).toLocalDate().isAfter(aDay) || start.plus(this.numberOfOccurrences, this.frequency).toLocalDate().isEqual(aDay));
+                while (start.toLocalDate().isBefore(aDay) || start.toLocalDate().isEqual(aDay)) {
+                    if (start.toLocalDate().isBefore(aDay) || start.toLocalDate().isEqual(aDay)) {
+                        if (myEnd.toLocalDate().isAfter(aDay) || myEnd.toLocalDate().isEqual(aDay)) {
+                            return true;
+                        }
+                    }
+                }
+
+                return r;
+
+            }
+        }
         
 }
