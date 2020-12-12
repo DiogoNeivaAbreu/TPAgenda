@@ -8,13 +8,7 @@ import java.time.temporal.ChronoUnit;
  * Description : A repetitive Event
  */
 public class RepetitiveEvent extends Event {
-    
-    public String title;
-    public LocalDateTime start;
-    public Duration duration;
-    public ChronoUnit frequency;
-    List<LocalDate> lesExceptions = new ArrayList<>();
-     
+
     /**
      * Constructs a repetitive event
      *
@@ -28,14 +22,12 @@ public class RepetitiveEvent extends Event {
      * <LI>ChronoUnit.MONTHS for monthly repetitions</LI>
      * </UL>
      */
+    private final ChronoUnit frequency;
+    private ArrayList<LocalDate> joursExceptionnels = new ArrayList<>();
+
     public RepetitiveEvent(String title, LocalDateTime start, Duration duration, ChronoUnit frequency) {
         super(title, start, duration);
-        // TODO : implémenter cette méthode
-        this.title = title;
-        this.start = start;
-        this.duration = duration;
         this.frequency = frequency;
-        
     }
 
     /**
@@ -44,7 +36,7 @@ public class RepetitiveEvent extends Event {
      * @param date the event will not occur at this date
      */
     public void addException(LocalDate date) {
-        lesExceptions.add(date);
+        this.joursExceptionnels.add(date);
     }
 
     /**
@@ -52,26 +44,30 @@ public class RepetitiveEvent extends Event {
      * @return the type of repetition
      */
     public ChronoUnit getFrequency() {
-        // TODO : implémenter cette méthode  
-        return frequency;
+        return this.frequency;
     }
-    
-    public boolean isInDay(LocalDate aDay){
-        boolean b=true;
-        
-        for (LocalDate d : lesExceptions){
-            if (!(d.isEqual(aDay))){
-                return true; 
+
+    @Override
+    public boolean isInDay(LocalDate aDay) {
+        LocalDate dateTest;
+        dateTest = this.getStart().toLocalDate();
+        boolean b = false;
+
+        //Tant que la date en paramètre est après le début de l'évènement,
+        // Ajouter +1 répétition à l'évènement
+        while (aDay.isAfter(dateTest) || aDay.equals(dateTest)) {
+            if (aDay.isEqual(dateTest)) {
+                b = true;
             }
+            dateTest = dateTest.plus(1, frequency);
         }
         
-        while (start.toLocalDate().isBefore(aDay) || start.equals(aDay)){
-            if (start.toLocalDate().isEqual(aDay)){
-                    return true;
+        //Tester si le jour ne porte pas d'exception
+        for(LocalDate d : joursExceptionnels){
+            if(aDay.isEqual(d)){
+                b=false;
             }
-            start = start.plus(1, frequency);
         }
         return b;
     }
-
 }

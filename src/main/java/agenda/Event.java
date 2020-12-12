@@ -40,12 +40,19 @@ public class Event {
      * @return true if the event occurs on that day, false otherwise
      */
     public boolean isInDay(LocalDate aDay) {
-        // TODO : implémenter cette méthode
-        
-        if (aDay.equals(myStart)){
-            return true;
+        LocalDateTime myEnd = myStart.plus(myDuration);
+
+        if (myStart.toLocalDate().isBefore(aDay) || myStart.toLocalDate().isEqual(aDay)) {
+            if (myEnd.toLocalDate().isAfter(aDay) || myEnd.toLocalDate().isEqual(aDay)) {
+                return true;
+            }
+            else{
+            return false;
+            }
         }
-        return false;
+        else{
+            return false;
+        }
     }
    
     /**
@@ -69,7 +76,9 @@ public class Event {
     public Duration getDuration() {
         return myDuration;
     }
-
-   
     
+    @Override
+    public String toString() {
+        return "Titre : " + this.myTitle + " Commence à " + this.myStart + " dure " + this.myDuration + " et se finit à " + this.myStart.plus(myDuration);
+    }
 }

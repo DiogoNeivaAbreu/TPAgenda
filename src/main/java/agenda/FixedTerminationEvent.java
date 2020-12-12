@@ -11,9 +11,6 @@ import java.time.temporal.ChronoUnit;
  */
 public class FixedTerminationEvent extends RepetitiveEvent {
 
-    public LocalDate terminationInclusive;
-    public long numberOfOccurrences;
-    public LocalDate fin;
     
     /**
      * Constructs a fixed terminationInclusive event ending at a given date
@@ -29,9 +26,13 @@ public class FixedTerminationEvent extends RepetitiveEvent {
      * </UL>
      * @param terminationInclusive the date when this event ends
      */
+    
+    private LocalDate terminationInclusive;
+    private long numberOfOccurrences;
+    private ChronoUnit frequency;
+    
     public FixedTerminationEvent(String title, LocalDateTime start, Duration duration, ChronoUnit frequency, LocalDate terminationInclusive) {
          super(title, start, duration, frequency);
-        // TODO : implémenter cette méthode
         this.terminationInclusive = terminationInclusive;
 
     }
@@ -50,9 +51,8 @@ public class FixedTerminationEvent extends RepetitiveEvent {
      * </UL>
      * @param numberOfOccurrences the number of occurrences of this repetitive event
      */
-    public FixedTerminationEvent(String title, LocalDateTime start, Duration duration, ChronoUnit frequency, long numberOfOccurrences) {
+        public FixedTerminationEvent(String title, LocalDateTime start, Duration duration, ChronoUnit frequency, long numberOfOccurrences) {
         super(title, start, duration, frequency);
-        // TODO : implémenter cette méthode
         this.numberOfOccurrences = numberOfOccurrences;
     }
 
@@ -61,13 +61,22 @@ public class FixedTerminationEvent extends RepetitiveEvent {
      * @return the termination date of this repetitive event
      */
     public LocalDate getTerminationDate() {
-        // TODO : implémenter cette méthode
-        return this.getStart().plus(this.numberOfOccurrences - 1, frequency).toLocalDate();
+        LocalDate fin;
+        fin = this.getStart().plus(numberOfOccurrences-1, this.getFrequency()).toLocalDate();
+        return fin;
     }
 
     public long getNumberOfOccurrences() {
-        // TODO : implémenter cette méthode
-        return this.getStart().toLocalDate().until(this.terminationInclusive, frequency) + 1;
+        LocalDate fin, debut;
+        fin = this.terminationInclusive;
+        debut = this.getStart().toLocalDate();
+        
+
+        while(fin.isAfter(debut)){
+            this.numberOfOccurrences += 1;
+            fin = fin.minus(1, this.getFrequency());
+        }
+        return this.numberOfOccurrences;
     }
-    
+        
 }
