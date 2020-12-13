@@ -62,10 +62,19 @@ public class Agenda {
      */
     public boolean isFreeFor(Event e) {
         // TODO : implémenter cette méthode
-        for(Event evenement:myEvents){
-            if(e.getStart().isAfter(evenement.getStart()))
+        for(Event evenement : myEvents){
+            if((evenement.getStart().isEqual(e.getStart())
+                    ||
+                    evenement.getStart().isAfter(e.getStart()) && evenement.getStart().isBefore(e.getStart().plus(e.getDuration())))
+                    ||
+                    (evenement.getStart().plus(evenement.getDuration()).isAfter(e.getStart())&&evenement.getStart().plus(evenement.getDuration()).isBefore(e.getStart().plus(e.getDuration())))
+                    ||
+                    evenement.getStart().plus(evenement.getDuration()).isEqual(e.getStart().plus(e.getDuration()))){
                 return false;
+            }
         }
         return true;
     }
+    
+    
 }
